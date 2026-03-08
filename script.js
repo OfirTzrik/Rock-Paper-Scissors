@@ -1,3 +1,11 @@
+const btns_rps = document.querySelectorAll("button");
+const result = document.querySelector("#result");
+const score = document.querySelector("#score");
+const winner = document.querySelector("#winner");
+
+let playerScore = 0;
+let compScore = 0;
+
 // Randomize a computer choice
 function getComputerChoice() {
     let compMove = Math.random();
@@ -11,87 +19,81 @@ function getComputerChoice() {
 }
 
 // Get the player choice
-function getPlayerChoice() {
-    let playerMove = prompt("Rock, paper or scissors?");
-    return playerMove;
+function getPlayerChoice(btn) {
+    if (btn == "btn-rock") {
+        return "rock";
+    } else if (btn == "btn-paper") {
+        return "paper"
+    } else {
+        return "scissors";
+    }
 }
 
-// Play 5 rounds of Rock, Paper, Scissors
-function playGame() {
-    let playerScore = 0;
-    let compScore = 0;
+function roundLogic(compMove, playerMove) {
+    let roundWinner;
 
-    function roundLogic(compMove, playerMove) {
-        let roundWinner;
-
-        if (compMove == "rock") {
-            if (playerMove == "rock") {
-                roundWinner = "draw";
-            } else if (playerMove == "paper") {
-                roundWinner = "player";
-            } else {
-                roundWinner = "comp";
-            }
-        } else if (compMove == "paper") {
-            if (playerMove == "rock") {
-                roundWinner = "comp";
-            } else if (playerMove == "paper") {
-                roundWinner = "draw";
-            } else {
-                roundWinner = "player";
-            }
+    if (compMove == "rock") {
+        if (playerMove == "rock") {
+            roundWinner = "draw";
+        } else if (playerMove == "paper") {
+            roundWinner = "player";
         } else {
-            if (playerMove == "rock") {
-                roundWinner = "player";
-            } else if (playerMove == "paper") {
-                roundWinner = "comp";
-            } else {
-                roundWinner = "draw";
-            }
+            roundWinner = "computer";
         }
-
-        return roundWinner;
-    }
-
-    function updateScore(roundWinner) {
-        if (roundWinner == "player") {
-            playerScore++;
-            console.log("Player won the round!");
-        } else if (roundWinner == "comp") {
-            compScore++;
-            console.log("Computer won the round!");
+    } else if (compMove == "paper") {
+        if (playerMove == "rock") {
+            roundWinner = "computer";
+        } else if (playerMove == "paper") {
+            roundWinner = "draw";
         } else {
-            console.log("The round is a draw!");
+            roundWinner = "player";
+        }
+    } else {
+        if (playerMove == "rock") {
+            roundWinner = "player";
+        } else if (playerMove == "paper") {
+            roundWinner = "computer";
+        } else {
+            roundWinner = "draw";
         }
     }
 
-    // Play a single round of Rock, Paper, Scissors
-    function playRound() {
-        let compMove = getComputerChoice();
-        let playerMove = getPlayerChoice().toLowerCase();
-
-        let roundWinner = roundLogic(compMove, playerMove);
-        updateScore(roundWinner);
-
-        console.log(`Player Score: ${playerScore}\nComputer Score: ${compScore}`);
-    }
-
-    // Decide the winner after 5 rounds
-    function decideWinner(compScore, playerScore) {
-        if (playerScore > compScore) {
-            console.log("Player won!");
-        } else if (playerScore < compScore) {
-            console.log("Computer won!");
-        } else {
-            console.log("It's a draw!");
-        }
-    }
-
-    for (let i = 0; i < 5; i++) {
-        playRound();
-    }
-
-    decideWinner();
+    return roundWinner;
 }
 
-playGame();
+function updateScore(roundWinner, compMove, playerMove) {
+    if (roundWinner == "player") {
+        playerScore++;
+    } else if (roundWinner == "computer") {
+        compScore++;
+    }
+
+    if (roundWinner != "draw") {
+        result.textContent = `Round winner is ${roundWinner.toUpperCase()}, computer played ${compMove.toUpperCase()} and player played ${playerMove.toUpperCase()}`;
+    } else {
+        result.textContent = `Round ended in a DRAW, both picked ${playerMove.toUpperCase()}`;
+    }
+    
+}
+
+function playRound(btn) {
+    let compMove = getComputerChoice();
+    let playerMove = getPlayerChoice(btn).toLowerCase();
+
+    let roundWinner = roundLogic(compMove, playerMove);
+    updateScore(roundWinner, compMove, playerMove);
+
+    score.textContent = `PLAYER Score: ${playerScore}, COMPUTER Score: ${compScore}`;
+
+    if (playerScore == 5) {
+        winner.textContent = "You won!";
+    } else if (compScore == 5) {
+        winner.textContent = "You lost!";
+    }
+}
+
+for (const btn of btns_rps) {
+    btn.addEventListener("click", (event) => {
+        playRound(event.target.classList[0]);
+    });
+}

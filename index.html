@@ -3,10 +3,32 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="module" src="script.js"></script>
+        <link rel="stylesheet" href="style.css">
         <title>Rock Paper Scissors</title>
     </head>
     <body>
-        
+        <header>
+            <div class="header-footer">
+                <h1>Rock, Paper, Scissors!</h1>
+            </div>
+        </header>
+        <main>
+            <div id="buttons">
+                <button class="btn-rock"><img src="./assets/rock.png" alt="rock" class="btn-rock"></button>
+                <button class="btn-paper"><img src="./assets/paper.png" alt="paper" class="btn-paper"></button>
+                <button class="btn-scissors"><img src="./assets/scissors.png" alt="scissors" class="btn-scissors"></button>
+            </div>
+            <div id="updates">
+                <p id="result">...</p>
+                <p id="score">PLAYER Score: 0, COMPUTER Score: 0</p>
+                <p id="winner">...</p>
+            </div>
+        </main>
+        <footer>
+            <div class="header-footer">
+                <p>Made by OfirTzrik as part of "The Odin Project"</p>
+            </div>
+        </footer>
+        <script type="module" src="script.js"></script>
     </body>
 </html>
